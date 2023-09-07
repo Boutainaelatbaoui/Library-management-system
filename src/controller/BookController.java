@@ -1,7 +1,6 @@
 package controller;
 import java.util.List;
 import java.util.Scanner;
-
 import domain.entities.Author;
 import domain.entities.Book;
 import repository.BookRepository;
@@ -17,8 +16,9 @@ public class BookController {
             System.out.println("1. Create Book");
             System.out.println("2. Read All Books");
             System.out.println("3. Update Book");
-            System.out.println("4. Delete Delete");
-            System.out.println("5. Exit");
+            System.out.println("4. Delete Book");
+            System.out.println("5. Search By Title");
+            System.out.println("6. Exit");
 
             int choice = Integer.parseInt(scanner.nextLine());
 
@@ -37,6 +37,12 @@ public class BookController {
                     deleteBook(bookRepository, scanner);
                     break;
                 case 5:
+                    System.out.println("Enter Book Title to delete:");
+                    String bookTitleToFound = scanner.nextLine();
+                    Book book = bookRepository.getBookByTitle(bookTitleToFound);
+                    displayBook(book);
+                    break;
+                case 6:
                     System.out.println("Exiting the application.");
                     scanner.close();
                     System.exit(0);
@@ -82,6 +88,26 @@ public class BookController {
             bookRepository.createBook(book);
         } else {
             System.out.println("Invalid author selection.");
+        }
+    }
+
+    private static void displayBook(Book book) {
+        if (book == null) {
+            System.out.println("No book found.");
+        } else {
+            System.out.println("The book:");
+            System.out.println("Title: " + book.getTitle());
+            System.out.println("Description: " + book.getDescription());
+            System.out.println("Publication Year: " + book.getPublicationYear());
+            System.out.println("ISBN: " + book.getIsbn());
+            System.out.println("Quantity: " + book.getQuantity());
+
+            Author author = book.getAuthor();
+            System.out.println("Author Name: " + author.getName());
+            System.out.println("Author Biography: " + author.getBiography());
+            System.out.println("Author Birthdate: " + author.getBirthdate());
+
+            System.out.println();
         }
     }
 

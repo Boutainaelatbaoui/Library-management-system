@@ -79,7 +79,7 @@ public class BookRepository {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    int id = resultSet.getInt("id");
+                    int id = resultSet.getInt("book_id");
                     String description = resultSet.getString("description");
                     String publicationYear = resultSet.getString("publication_year");
                     String isbn = resultSet.getString("isbn");

@@ -20,7 +20,8 @@ public class BookController {
             System.out.println("4. Delete Book");
             System.out.println("5. Search By Title");
             System.out.println("6. Search By Author");
-            System.out.println("7. Exit");
+            System.out.println("7. Display Available Books");
+            System.out.println("8. Exit");
             System.out.println("**************************************************");
 
             int choice = Integer.parseInt(scanner.nextLine());
@@ -58,12 +59,41 @@ public class BookController {
                     System.out.println("**************************************************");
                     break;
                 case 7:
+                    List<Book> availableBooks = bookRepository.getAllAvailableBooks();
+                    displayBooks(availableBooks);
+                    System.out.println("**************************************************");
+                    break;
+                case 8:
                     System.out.println("Exiting the application.");
                     scanner.close();
                     System.exit(0);
                 default:
                     System.out.println("Invalid option. Please try again.");
                     System.out.println("**************************************************");
+            }
+        }
+    }
+
+    public static void displayBooks(List<Book> availableBooks) {
+        if (availableBooks.isEmpty()) {
+            System.out.println("No books found.");
+        } else {
+            System.out.println("List of Books:");
+            for (Book book : availableBooks) {
+                System.out.println("Title: " + book.getTitle());
+                System.out.println("Description: " + book.getDescription());
+                System.out.println("Publication Year: " + book.getPublicationYear());
+                System.out.println("ISBN: " + book.getIsbn());
+                System.out.println("Quantity: " + book.getQuantity());
+
+                System.out.println("######################");
+
+                Author author = book.getAuthor();
+                System.out.println("Author Name: " + author.getName());
+                System.out.println("Author Biography: " + author.getBiography());
+                System.out.println("Author Birthdate: " + author.getBirthdate());
+
+                System.out.println();
             }
         }
     }

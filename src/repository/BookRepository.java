@@ -9,6 +9,41 @@ import dbconnection.DbConnection;
 import domain.entities.*;
 
 public class BookRepository {
+    public static List<Book> getAllAvailableBooks() {
+        Connection connection = DbConnection.getConnection();
+        List<Book> books = new ArrayList<>();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT b.*, a.* FROM books AS b " +
+                "INNER JOIN bookcopies AS bc ON b.book_id = bc.book_id " +
+                "INNER JOIN authors AS a ON b.author_id = a.author_id " +
+                "WHERE bc.status = 'AVAILABLE'");
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("book_id");
+                String title = resultSet.getString("title");
+                String description = resultSet.getString("description");
+                String publicationYear = resultSet.getString("publication_year");
+                String isbn = resultSet.getString("isbn");
+                int quantity = resultSet.getInt("quantity");
+
+                int authorId = resultSet.getInt("author_id");
+                String authorName = resultSet.getString("name");
+                String authorBiography = resultSet.getString("biography");
+                String authorBirthdate = resultSet.getString("birthdate");
+
+                Author author = new Author(authorId, authorName, authorBiography, authorBirthdate);
+
+                Book book = new Book(title, description, publicationYear, isbn, quantity, author);
+                books.add(book);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return books;
+    }
+
     public static List<Book> getAllBooks() {
         Connection connection = DbConnection.getConnection();
         List<Book> books = new ArrayList<>();

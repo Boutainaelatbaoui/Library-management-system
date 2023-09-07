@@ -52,8 +52,8 @@ public class BookController {
                 case 6:
                     System.out.println("Enter an Author Name:");
                     String authorNameToFound = scanner.nextLine();
-                    book = bookRepository.getBookByAuthor(authorNameToFound);
-                    displayBook(book);
+                    books = bookRepository.getBooksByAuthor(authorNameToFound);
+                    displayBooks(books);
                     System.out.println("**************************************************");
                     break;
                 case 7:
@@ -131,6 +131,7 @@ public class BookController {
             System.out.println("No books found.");
         } else {
             System.out.println("List of Books:");
+            System.out.println(books);
             for (Book book : books) {
                 System.out.println("Title: " + book.getTitle());
                 System.out.println("Description: " + book.getDescription());
@@ -138,8 +139,9 @@ public class BookController {
                 System.out.println("ISBN: " + book.getIsbn());
                 System.out.println("Quantity: " + book.getQuantity());
 
+                System.out.println("######################");
+
                 Author author = book.getAuthor();
-                System.out.println("Author ID: " + author.getId());
                 System.out.println("Author Name: " + author.getName());
                 System.out.println("Author Biography: " + author.getBiography());
                 System.out.println("Author Birthdate: " + author.getBirthdate());
@@ -197,7 +199,4 @@ public class BookController {
             System.out.println("Invalid author selection.");
         }
     }
-
-
-
 }

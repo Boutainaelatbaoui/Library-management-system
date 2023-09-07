@@ -25,7 +25,6 @@ public class BookRepository {
                 String isbn = resultSet.getString("isbn");
                 int quantity = resultSet.getInt("quantity");
 
-                // Fetch author information from the database
                 int authorId = resultSet.getInt("author_id");
                 String authorName = resultSet.getString("name");
                 String authorBiography = resultSet.getString("biography");
@@ -66,39 +65,42 @@ public class BookRepository {
         }
     }
 
-    public Book getBookByAuthor(String bookTitle) {
-        Connection connection = DbConnection.getConnection();
-        Book book = null;
+    public List<Book> getBooksByAuthor(String authorName) {
         String query = "SELECT * " +
                 "FROM books b " +
                 "INNER JOIN authors a ON b.author_id = a.author_id " +
                 "WHERE a.name = ?";
+        List<Book> books = new ArrayList<>();
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, bookTitle);
+        try (Connection connection = DbConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setString(1, authorName);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    int id = resultSet.getInt("book_id");
+                while (resultSet.next()) {
+                    int bookId = resultSet.getInt("book_id");
+                    String title = resultSet.getString("title");
                     String description = resultSet.getString("description");
                     String publicationYear = resultSet.getString("publication_year");
                     String isbn = resultSet.getString("isbn");
                     int quantity = resultSet.getInt("quantity");
 
                     int authorId = resultSet.getInt("author_id");
-                    String authorName = resultSet.getString("name");
                     String authorBiography = resultSet.getString("biography");
                     String authorBirthdate = resultSet.getString("birthdate");
 
                     Author author = new Author(authorId, authorName, authorBiography, authorBirthdate);
-                    book = new Book(bookTitle, description, publicationYear, isbn, quantity, author);
+
+                    Book book = new Book(title, description, publicationYear, isbn, quantity, author);
+                    books.add(book);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return book;
+        return books;
     }
 
     public Book getBookByTitle(String bookTitle) {

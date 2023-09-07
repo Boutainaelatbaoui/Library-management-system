@@ -18,36 +18,51 @@ public class BookController {
             System.out.println("3. Update Book");
             System.out.println("4. Delete Book");
             System.out.println("5. Search By Title");
-            System.out.println("6. Exit");
+            System.out.println("6. Search By Author");
+            System.out.println("7. Exit");
+            System.out.println("**************************************************");
 
             int choice = Integer.parseInt(scanner.nextLine());
 
             switch (choice) {
                 case 1:
                     createBook(bookRepository, scanner);
+                    System.out.println("**************************************************");
                     break;
                 case 2:
                     List<Book> books = bookRepository.getAllBooks();
                     displayBooks(books);
+                    System.out.println("**************************************************");
                     break;
                 case 3:
                     updateBook(bookRepository, scanner);
+                    System.out.println("**************************************************");
                     break;
                 case 4:
                     deleteBook(bookRepository, scanner);
+                    System.out.println("**************************************************");
                     break;
                 case 5:
-                    System.out.println("Enter Book Title to delete:");
+                    System.out.println("Enter a Title:");
                     String bookTitleToFound = scanner.nextLine();
                     Book book = bookRepository.getBookByTitle(bookTitleToFound);
                     displayBook(book);
+                    System.out.println("**************************************************");
                     break;
                 case 6:
+                    System.out.println("Enter an Author Name:");
+                    String authorNameToFound = scanner.nextLine();
+                    book = bookRepository.getBookByAuthor(authorNameToFound);
+                    displayBook(book);
+                    System.out.println("**************************************************");
+                    break;
+                case 7:
                     System.out.println("Exiting the application.");
                     scanner.close();
                     System.exit(0);
                 default:
                     System.out.println("Invalid option. Please try again.");
+                    System.out.println("**************************************************");
             }
         }
     }

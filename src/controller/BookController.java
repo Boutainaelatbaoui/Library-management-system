@@ -5,6 +5,7 @@ import domain.entities.Author;
 import domain.entities.Book;
 import repository.BookRepository;
 import repository.AuthorRepository;
+import service.BookService;
 
 public class BookController {
     public static void main(String[] args) {
@@ -30,8 +31,8 @@ public class BookController {
                     System.out.println("**************************************************");
                     break;
                 case 2:
-                    List<Book> books = bookRepository.getAllBooks();
-                    displayBooks(books);
+                    BookService bookService = new BookService();
+                    bookService.displayBooks();
                     System.out.println("**************************************************");
                     break;
                 case 3:
@@ -52,8 +53,8 @@ public class BookController {
                 case 6:
                     System.out.println("Enter an Author Name:");
                     String authorNameToFound = scanner.nextLine();
-                    books = bookRepository.getBooksByAuthor(authorNameToFound);
-                    displayBooks(books);
+                    bookService = new BookService();
+                    bookService.displayBooks();
                     System.out.println("**************************************************");
                     break;
                 case 7:
@@ -126,30 +127,7 @@ public class BookController {
         }
     }
 
-    private static void displayBooks(List<Book> books) {
-        if (books.isEmpty()) {
-            System.out.println("No books found.");
-        } else {
-            System.out.println("List of Books:");
-            System.out.println(books);
-            for (Book book : books) {
-                System.out.println("Title: " + book.getTitle());
-                System.out.println("Description: " + book.getDescription());
-                System.out.println("Publication Year: " + book.getPublicationYear());
-                System.out.println("ISBN: " + book.getIsbn());
-                System.out.println("Quantity: " + book.getQuantity());
 
-                System.out.println("######################");
-
-                Author author = book.getAuthor();
-                System.out.println("Author Name: " + author.getName());
-                System.out.println("Author Biography: " + author.getBiography());
-                System.out.println("Author Birthdate: " + author.getBirthdate());
-
-                System.out.println();
-            }
-        }
-    }
 
     private static void deleteBook(BookRepository bookRepository, Scanner scanner) {
         System.out.println("Enter Book Title to delete:");

@@ -18,7 +18,7 @@ CREATE TABLE books (
 
 CREATE TABLE bookcopies (
    bookcopy_id INT PRIMARY KEY,
-   status ENUM('BORROWED', 'RETURNED', 'LOST') NOT NULL,
+   status ENUM('AVAILABLE', 'BORROWED', 'RETURNED', 'LOST') NOT NULL,
    book_id INT,
    FOREIGN KEY (book_id) REFERENCES books(book_id)
 );

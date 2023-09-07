@@ -80,7 +80,6 @@ public class BookController {
             Book book = new Book(title, description, publicationYear, isbn, quantity, selectedAuthor);
 
             bookRepository.createBook(book);
-            System.out.println("Book created successfully.");
         } else {
             System.out.println("Invalid author selection.");
         }
@@ -121,27 +120,43 @@ public class BookController {
         String bookTitleToUpdate = scanner.nextLine();
 
         System.out.println("Enter New Title:");
-        String newTitle = scanner.nextLine();
+        String title = scanner.nextLine();
 
         System.out.println("Enter New Description:");
-        String newDescription = scanner.nextLine();
+        String description = scanner.nextLine();
 
         System.out.println("Enter New Publication Year:");
-        String newPublicationYear = scanner.nextLine();
+        String publicationYear = scanner.nextLine();
 
         System.out.println("Enter New ISBN:");
-        String newIsbn = scanner.nextLine();
+        String isbn = scanner.nextLine();
 
         System.out.println("Enter New Quantity:");
-        int newQuantity = Integer.parseInt(scanner.nextLine());
+        int quantity = Integer.parseInt(scanner.nextLine());
 
-        boolean updated = bookRepository.updateBookByTitle(bookTitleToUpdate, newTitle, newDescription, newPublicationYear, newIsbn, newQuantity, newAuthor);
+        AuthorRepository authorRepository = new AuthorRepository();
+        List<Author> authorsList = authorRepository.getAllAuthors();
 
-        if (updated) {
-            System.out.println("Book updated successfully.");
+        System.out.println("Select a New Author:");
+
+        for (int i = 0; i < authorsList.size(); i++) {
+            Author author = authorsList.get(i);
+            System.out.println((i + 1) + ". " + author.getName());
+        }
+
+        int authorChoice = Integer.parseInt(scanner.nextLine());
+
+        if (authorChoice >= 1 && authorChoice <= authorsList.size()) {
+            Author selectedAuthor = authorsList.get(authorChoice - 1);
+
+            Book book = new Book(title, description, publicationYear, isbn, quantity, selectedAuthor);
+
+            bookRepository.updateBook(bookTitleToUpdate, book);
         } else {
-            System.out.println("Book not found. Update failed.");
+            System.out.println("Invalid author selection.");
         }
     }
+
+
 
 }

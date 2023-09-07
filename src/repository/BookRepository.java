@@ -120,33 +120,28 @@ public class BookRepository {
         }
     }
 
-    public boolean updateBookByTitle(Book bookToUpdate, String newTitle, String newDescription, String newPublicationYear, String newIsbn, int newQuantity, int newAuthor) {
+    public void updateBook(String bookTitle, Book book){
         Connection connection = DbConnection.getConnection();
         String updateQuery = "UPDATE books SET title = ?, description = ?, publication_year = ?, isbn = ?, quantity = ?, author_id = ? WHERE title = ?";
-        boolean updated = false;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
-            preparedStatement.setString(1, newTitle);
-            preparedStatement.setString(2, newDescription);
-            preparedStatement.setString(3, newPublicationYear);
-            preparedStatement.setString(4, newIsbn);
-            preparedStatement.setInt(5, newQuantity);
-            preparedStatement.setInt(5, newAuthor);
-            preparedStatement.setString(6, bookToUpdate.getTitle()); // Use the book's current title as the identifier
+            preparedStatement.setString(1, book.getTitle());
+            preparedStatement.setString(2, book.getDescription());
+            preparedStatement.setString(3, book.getPublicationYear());
+            preparedStatement.setString(4, book.getIsbn());
+            preparedStatement.setInt(5, book.getQuantity());
+            preparedStatement.setInt(6, book.getAuthor().getId());
+            preparedStatement.setString(7, bookTitle);
 
-            int rowsAffected = preparedStatement.executeUpdate();
-
-            if (rowsAffected > 0) {
-                updated = true;
+            int rowsInserted = preparedStatement.executeUpdate();
+            if (rowsInserted > 0) {
                 System.out.println("Book updated successfully.");
             } else {
-                System.out.println("Book not found. Update failed.");
+                System.out.println("Failed to create the book.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return updated;
     }
 
 }

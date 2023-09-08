@@ -11,11 +11,12 @@ public class ClientService {
     public ClientService(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
     }
-    public static void checkClientExistence(String cin, ClientRepository clientRepository, Scanner scanner) {
+
+    public Client checkClientExistence(String cin, Scanner scanner) {
         if (clientRepository.doesClientExist(cin)) {
             Client client = clientRepository.getClientByCin(cin);
             System.out.println("Client with CIN " + cin + " exists in the database.");
-            displayClient(client);
+            return client;
         } else {
             System.out.println("Client with CIN " + cin + " does not exist in the database.");
 
@@ -23,14 +24,15 @@ public class ClientService {
             String createOption = scanner.nextLine().toLowerCase();
 
             if (createOption.equals("yes")) {
-                createClientFromUserInput(cin, clientRepository, scanner);
+                return createClientFromUserInput(cin, scanner);
             } else {
                 System.out.println("No new client created.");
+                return null;
             }
         }
     }
 
-    public static void createClientFromUserInput(String cin, ClientRepository clientRepository, Scanner scanner) {
+    public Client createClientFromUserInput(String cin, Scanner scanner) {
         System.out.println("Enter Client Full Name:");
         String fullName = scanner.nextLine();
 
@@ -44,9 +46,11 @@ public class ClientService {
 
         Client newClient = new Client(fullName, email, cin, memberNum, telephone);
         clientRepository.createClient(newClient);
+
+        return newClient;
     }
 
-    public static void displayClient(Client client) {
+    public void displayClient(Client client) {
         if (client != null) {
             System.out.println("Client Information:");
             System.out.println("Full Name: " + client.getFullName());
@@ -59,4 +63,3 @@ public class ClientService {
         }
     }
 }
-

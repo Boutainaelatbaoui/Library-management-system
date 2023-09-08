@@ -1,7 +1,10 @@
 package controller;
 
 import dbconnection.DbConnection;
+import domain.entities.Client;
+import repository.BookRepository;
 import repository.ClientRepository;
+import service.BookService;
 import service.ClientService;
 
 import java.util.Scanner;
@@ -25,10 +28,14 @@ public class ClientController {
                 case 1:
                     System.out.println("Enter CIN to check if client exists:");
                     String cin = scanner.nextLine();
-                    clientService.checkClientExistence(cin, clientRepository, scanner);
+                    Client client = clientService.checkClientExistence(cin, scanner);
+
+                    if (client != null) {
+                        BookController.searchByTitle(new BookRepository(), scanner, new BookService());
+                    }
                     break;
                 case 2:
-                    //
+                    BookController.main(args);
                     break;
                 default:
                     System.out.println("Invalid option. Please try again.");

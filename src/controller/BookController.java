@@ -43,7 +43,7 @@ public class BookController {
                         displayAvailableBooks(bookRepository, bookService);
                         break;
                     case 8:
-                        displayAvailableBooks(bookRepository, bookService);
+                        ClientController.main(args);
                         break;
                     case 9:
                         System.out.println("Exiting the application.");
@@ -169,7 +169,7 @@ public class BookController {
         bookRepository.deleteBook(bookTitleToDelete);
     }
 
-    private static void searchByTitle(BookRepository bookRepository, Scanner scanner, BookService bookService) {
+    public static void searchByTitle(BookRepository bookRepository, Scanner scanner, BookService bookService) {
         System.out.println("Enter a Title:");
         String bookTitleToFind = scanner.nextLine();
         Book book = bookRepository.getBookByTitle(bookTitleToFind);

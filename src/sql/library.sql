@@ -1,30 +1,32 @@
 CREATE TABLE authors (
-    author_id INT PRIMARY KEY,
+    author_id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(256),
     biography TEXT,
     birthdate VARCHAR(150)
 );
 
 CREATE TABLE books (
-     book_id INT PRIMARY KEY,
-     title VARCHAR(256),
-     description TEXT,
-     publication_year VARCHAR(150),
-     isbn VARCHAR(256),
-     quantity INT,
-     author_id INT,
-     FOREIGN KEY (author_id) REFERENCES authors(author_id)
+   book_id INT PRIMARY KEY AUTO_INCREMENT,
+   title VARCHAR(256),
+   description TEXT,
+   publication_year VARCHAR(150),
+   isbn VARCHAR(256),
+   quantity INT,
+   author_id INT,
+   FOREIGN KEY (author_id) REFERENCES authors(author_id) ON DELETE CASCADE
 );
+
 
 CREATE TABLE bookcopies (
-   bookcopy_id INT PRIMARY KEY,
-   status ENUM('AVAILABLE', 'BORROWED', 'RETURNED', 'LOST') NOT NULL,
-   book_id INT,
-   FOREIGN KEY (book_id) REFERENCES books(book_id)
+    bookcopy_id INT PRIMARY KEY AUTO_INCREMENT,
+    status ENUM('AVAILABLE', 'BORROWED', 'RETURNED', 'LOST') NOT NULL,
+    book_id INT,
+    FOREIGN KEY (book_id) REFERENCES books(book_id) ON DELETE CASCADE
 );
 
+
 CREATE TABLE clients (
-     client_id INT PRIMARY KEY,
+     client_id INT PRIMARY KEY AUTO_INCREMENT,
      full_name VARCHAR(256),
      email VARCHAR(256) UNIQUE,
      cin VARCHAR(20),
@@ -33,14 +35,15 @@ CREATE TABLE clients (
 );
 
 CREATE TABLE reservations (
-     reservation_id INT PRIMARY KEY,
-     borrowing_date DATETIME,
-     due_date DATETIME,
-     bookcopy_id INT,
-     client_id INT,
-     FOREIGN KEY (bookcopy_id) REFERENCES bookcopies(bookcopy_id),
-     FOREIGN KEY (client_id) REFERENCES clients(client_id)
+      reservation_id INT PRIMARY KEY AUTO_INCREMENT,
+      borrowing_date DATETIME,
+      due_date DATETIME,
+      bookcopy_id INT,
+      client_id INT,
+      FOREIGN KEY (bookcopy_id) REFERENCES bookcopies(bookcopy_id) ON DELETE CASCADE,
+      FOREIGN KEY (client_id) REFERENCES clients(client_id) ON DELETE CASCADE
 );
+
 
 INSERT INTO authors (author_id, name, biography, birthdate) VALUES
 (1, 'J.K. Rowling', 'British author best known for the Harry Potter series.', 'July 31, 1965'),

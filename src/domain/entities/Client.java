@@ -4,13 +4,12 @@ public class Client {
     private int id;
     private String fullName;
     private String email;
-    private String memberNum;
+    private int memberNum;
     private String telephone;
     private String cin;
 
     // Constructor
-    public Client(int id, String fullName, String email, String memberNum, String telephone, String cin) {
-        this.id = id;
+    public Client(String fullName, String email, String cin, int memberNum, String telephone) {
         this.fullName = fullName;
         this.email = email;
         this.memberNum = memberNum;
@@ -42,11 +41,11 @@ public class Client {
         this.email = email;
     }
 
-    public String getMemberNum() {
+    public int getMemberNum() {
         return memberNum;
     }
 
-    public void setMemberNum(String memberNum) {
+    public void setMemberNum(int memberNum) {
         this.memberNum = memberNum;
     }
 

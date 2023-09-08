@@ -140,7 +140,6 @@ public class BookRepository {
 
     public Book getBookByTitle(String bookTitle) {
         Connection connection = DbConnection.getConnection();
-        Book book = null;
         String query = "SELECT * " +
                 "FROM books b " +
                 "INNER JOIN authors a ON b.author_id = a.author_id " +
@@ -163,14 +162,15 @@ public class BookRepository {
                     String authorBirthdate = resultSet.getString("birthdate");
 
                     Author author = new Author(authorId, authorName, authorBiography, authorBirthdate);
-                    book = new Book(bookTitle, description, publicationYear, isbn, quantity, author);
+                    Book book = new Book(bookTitle, description, publicationYear, isbn, quantity, author);
+                    return book;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return book;
+        return null;
     }
 
     public void deleteBook(String bookTitle) {
@@ -181,7 +181,6 @@ public class BookRepository {
             preparedStatement.setString(1, bookTitle);
 
             int rowsAffected = preparedStatement.executeUpdate();
-
             if (rowsAffected > 0) {
                 System.out.println("Book deleted successfully.");
             } else {
@@ -215,7 +214,6 @@ public class BookRepository {
             e.printStackTrace();
         }
     }
-
 }
 
 

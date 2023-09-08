@@ -43,6 +43,9 @@ public class BookController {
                         displayAvailableBooks(bookRepository, bookService);
                         break;
                     case 8:
+                        displayAvailableBooks(bookRepository, bookService);
+                        break;
+                    case 9:
                         System.out.println("Exiting the application.");
                         return;
                     default:
@@ -52,7 +55,7 @@ public class BookController {
         }
     }
 
-    private static void printMenu() {
+    public static void printMenu() {
         System.out.println("Choose an option:");
         System.out.println("1. Create Book");
         System.out.println("2. Read All Books");
@@ -61,7 +64,8 @@ public class BookController {
         System.out.println("5. Search By Title");
         System.out.println("6. Search By Author");
         System.out.println("7. Display Available Books");
-        System.out.println("8. Exit");
+        System.out.println("8. Borrow a Book");
+        System.out.println("9. Exit");
         System.out.println("**************************************************");
     }
 

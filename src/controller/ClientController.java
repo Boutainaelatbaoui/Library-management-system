@@ -90,7 +90,7 @@ public class ClientController {
         return book;
     }
 
-    private static void displayReservationInformation(Reservation reservation) {
+    public static void displayReservationInformation(Reservation reservation) {
         System.out.println("Reservation Information:");
         System.out.println("Due Date: " + reservation.getDueDate());
         System.out.println("Borrowing Date: " + reservation.getBorrowingDate());

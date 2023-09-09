@@ -30,5 +30,9 @@ public class ReservationService {
         return reservation;
     }
 
+    public Reservation findReservation(String isbn, int memberNum) {
+        return reservationRepository.findReservation(isbn, memberNum);
+    }
+
 }
 

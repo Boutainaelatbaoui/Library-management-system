@@ -1,19 +1,29 @@
 package controller;
 
+import java.sql.Connection;
 import java.util.List;
 import java.util.Scanner;
 
+import dbconnection.DbConnection;
 import domain.entities.Author;
 import domain.entities.Book;
+import domain.entities.Client;
+import domain.entities.Reservation;
+import domain.enums.Status;
 import repository.AuthorRepository;
 import repository.BookRepository;
+import repository.ReservationRepository;
 import service.BookService;
+import service.ReservationService;
 
 public class BookController {
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
+            Connection connection = DbConnection.getConnection();
             BookRepository bookRepository = new BookRepository();
             BookService bookService = new BookService(bookRepository);
+            ReservationRepository reservationRepository = new ReservationRepository(connection);
+            ReservationService reservationService = new ReservationService(reservationRepository);
 
             while (true) {
                 printMenu();
@@ -46,6 +56,31 @@ public class BookController {
                         ClientController.main(args);
                         break;
                     case 9:
+                        System.out.println("Enter ISBN of the book:");
+                        String isbn = scanner.nextLine();
+                        System.out.println("Enter Member Number of the client:");
+                        int memberNum = Integer.parseInt(scanner.nextLine());
+
+                        Reservation reservation = reservationService.findReservation(isbn, memberNum);
+
+                        if (reservation != null) {
+                            System.out.println("Reservation found:");
+                            ClientController.displayReservationInformation(reservation);
+
+                            System.out.println("Do you want to return the book? (yes/no)");
+                            String returnOption = scanner.nextLine().toLowerCase();
+
+                            if (returnOption.equals("yes")) {
+                                bookService.updateBookCopyStatus(reservation.getBookCopy(), Status.RETURNED);
+                                System.out.println("Book returned successfully.");
+                            } else {
+                                System.out.println("Book not returned.");
+                            }
+                        } else {
+                            System.out.println("No reservation found for the given ISBN and Member Number.");
+                        }
+                        break;
+                    case 10:
                         System.out.println("Exiting the application.");
                         return;
                     default:
@@ -65,7 +100,8 @@ public class BookController {
         System.out.println("6. Search By Author");
         System.out.println("7. Display Available Books");
         System.out.println("8. Borrow a Book");
-        System.out.println("9. Exit");
+        System.out.println("9. Return a Book");
+        System.out.println("10. Exit");
         System.out.println("**************************************************");
     }
 

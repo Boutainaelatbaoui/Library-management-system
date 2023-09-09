@@ -218,7 +218,7 @@ public class BookRepository {
 
     public void updateBookCopyStatus(BookCopy bookCopy) {
         Connection connection = DbConnection.getConnection();
-        String query = "UPDATE book_copies SET status = ? WHERE book_copy_id = ?";
+        String query = "UPDATE bookcopies SET status = ? WHERE bookcopy_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, bookCopy.getStatus().toString());

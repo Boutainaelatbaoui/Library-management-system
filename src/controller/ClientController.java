@@ -50,13 +50,16 @@ public class ClientController {
                             boolean hasAvailableCopy = copyService.hasAvailableBookCopy(foundBook.getTitle(), copyRepository);
 
                             if (hasAvailableCopy) {
+                                System.out.println("This Book is Available in Our Library");
+                                bookService.displayBook(foundBook);
                                 System.out.println("Do you want to borrow the book? (yes/no)");
                                 String borrowOption = scanner.nextLine().toLowerCase();
 
                                 if (borrowOption.equals("yes")) {
                                     Reservation reservation = reservationService.createReservation(client, copyRepository.getBookCopies(foundBook.getTitle()));
 
-
+                                    bookService.updateBookCopyStatus(reservation.getBookCopy(), Status.BORROWED);
+                                    bookService.decreaseBookQuantity(foundBook);
 
                                     displayReservationInformation(reservation);
                                 } else {
@@ -89,8 +92,11 @@ public class ClientController {
 
     private static void displayReservationInformation(Reservation reservation) {
         System.out.println("Reservation Information:");
-        System.out.println("Reservation ID: " + reservation.getId());
         System.out.println("Due Date: " + reservation.getDueDate());
         System.out.println("Borrowing Date: " + reservation.getBorrowingDate());
+        System.out.println("Client: " + reservation.getClient().getFullName());
+        System.out.println("Client: " + reservation.getClient().getMemberNum());
+        System.out.println("Book Title: " + reservation.getBookCopy().getBook().getTitle());
+        System.out.println("Book Author: " + reservation.getBookCopy().getBook().getAuthor().getName());
     }
 }

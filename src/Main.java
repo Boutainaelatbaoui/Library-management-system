@@ -5,6 +5,8 @@ import domain.entities.BookCopy;
 import domain.entities.Client;
 import domain.entities.Reservation;
 import domain.enums.Status;
+import repository.BookRepository;
+import service.BookService;
 
 import java.util.Date;
 
@@ -19,6 +21,9 @@ public class Main {
 
         BookCopy bookcopy = new BookCopy(1, Status.LOST, book);
         System.out.println(bookcopy.getBookCopyInfo());
+
+        BookService bookService = new BookService(new BookRepository());
+        bookService.decreaseBookQuantity(book);
 
         DbConnection.getConnection();
     }

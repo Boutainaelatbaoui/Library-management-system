@@ -19,8 +19,7 @@ public class BookService {
         bookRepository.updateBookCopyStatus(bookCopy);
     }
     public void decreaseBookQuantity(Book book) {
-        int updatedQuantity = book.getQuantity() - 1;
-        book.setQuantity(updatedQuantity);
+        book.setQuantity(book.getQuantity() - 1);
         bookRepository.updateBookQuantity(book);
     }
     public void displayBook(Book book) {

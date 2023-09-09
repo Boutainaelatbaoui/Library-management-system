@@ -19,7 +19,6 @@ public class Book {
         this.author = author;
     }
 
-    // Getter and Setter methods for attributes
     public int getId() {
         return id;
     }

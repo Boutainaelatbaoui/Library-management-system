@@ -25,7 +25,7 @@ public class CopyRepository {
                 "FROM bookcopies bc " +
                 "INNER JOIN books b ON bc.book_id = b.book_id " +
                 "INNER JOIN authors a ON b.author_id = a.author_id " +
-                "WHERE b.title = ? AND bc.status = 'AVAILABLE' " + // Added single quotes around 'AVAILABLE'
+                "WHERE b.title = ? AND (bc.status = 'AVAILABLE' OR bc.status = 'RETURNED') " +
                 "LIMIT 1";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {

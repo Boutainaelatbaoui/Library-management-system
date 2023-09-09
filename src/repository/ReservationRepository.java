@@ -43,7 +43,7 @@ public class ReservationRepository {
                 "INNER JOIN books ON bookcopies.book_id = books.book_id " +
                 "INNER JOIN clients ON reservations.client_id = clients.client_id " +
                 "INNER JOIN authors ON authors.author_id = books.author_id " +
-                "WHERE books.isbn = ? AND clients.member_num = ?";
+                "WHERE books.isbn = ? AND clients.member_num = ? AND bookcopies.status = 'BORROWED'";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, isbn);

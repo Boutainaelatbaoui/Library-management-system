@@ -8,14 +8,6 @@ public class Client {
     private String telephone;
     private String cin;
 
-    // Constructor
-    public Client(String fullName, String email, String cin, int memberNum, String telephone) {
-        this.fullName = fullName;
-        this.email = email;
-        this.memberNum = memberNum;
-        this.telephone = telephone;
-        this.cin = cin;
-    }
 
     public int getId() {
         return id;

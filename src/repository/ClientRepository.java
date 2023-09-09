@@ -22,12 +22,14 @@ public class ClientRepository {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    String fullName = resultSet.getString("full_name");
-                    String email = resultSet.getString("email");
-                    int memberNum = resultSet.getInt("member_num");
-                    String telephone = resultSet.getString("telephone");
+                    Client client = new Client();
 
-                    Client client = new Client(fullName, email, clientCin, memberNum, telephone);
+                    client.setId(resultSet.getInt("client_id"));
+                    client.setFullName(resultSet.getString("full_name"));
+                    client.setEmail(resultSet.getString("email"));
+                    client.setCin(clientCin);
+                    client.setMemberNum(resultSet.getInt("member_num"));
+                    client.setTelephone(resultSet.getString("telephone"));
                     return client;
                 }
             }

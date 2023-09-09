@@ -44,7 +44,12 @@ public class ClientService {
         System.out.println("Enter Client Telephone:");
         String telephone = scanner.nextLine();
 
-        Client newClient = new Client(fullName, email, cin, memberNum, telephone);
+        Client newClient = new Client();
+        newClient.setFullName(fullName);
+        newClient.setEmail(email);
+        newClient.setCin(cin);
+        newClient.setTelephone(telephone);
+
         clientRepository.createClient(newClient);
 
         return newClient;

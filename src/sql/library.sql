@@ -40,8 +40,8 @@ CREATE TABLE reservations (
       due_date DATETIME,
       bookcopy_id INT,
       client_id INT,
-      FOREIGN KEY (bookcopy_id) REFERENCES bookcopies(bookcopy_id) ON DELETE CASCADE,
-      FOREIGN KEY (client_id) REFERENCES clients(client_id) ON DELETE CASCADE
+      FOREIGN KEY (bookcopy_id) REFERENCES bookcopies(bookcopy_id),
+      FOREIGN KEY (client_id) REFERENCES clients(client_id)
 );
 
 

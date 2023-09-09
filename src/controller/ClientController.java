@@ -56,8 +56,7 @@ public class ClientController {
                                 if (borrowOption.equals("yes")) {
                                     Reservation reservation = reservationService.createReservation(client, copyRepository.getBookCopies(foundBook.getTitle()));
 
-                                    bookService.updateBookCopyStatus(reservation.getBookCopy(), Status.BORROWED);
-                                    bookService.decreaseBookQuantity(foundBook);
+
 
                                     displayReservationInformation(reservation);
                                 } else {

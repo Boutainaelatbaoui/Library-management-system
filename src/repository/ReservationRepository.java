@@ -14,16 +14,16 @@ public class ReservationRepository {
     }
 
     public void saveReservation(Reservation reservation) {
-        String insertQuery = "INSERT INTO reservations (due_date, borrowing_date, client_id, bookcopy_id) " +
+        String insertQuery = "INSERT INTO reservations (borrowing_date, due_date, bookcopy_id, client_id) " +
                 "VALUES (?, ?, ?, ?)";
 
         Date borrowingDate = new Date();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
-            preparedStatement.setDate(1, new java.sql.Date(reservation.getDueDate().getTime()));
-            preparedStatement.setDate(2, new java.sql.Date(borrowingDate.getTime()));
-            preparedStatement.setInt(3, reservation.getClient().getId());
-            preparedStatement.setInt(4, reservation.getBookCopy().getId());
+            preparedStatement.setDate(1, new java.sql.Date(borrowingDate.getTime()));
+            preparedStatement.setDate(2, new java.sql.Date(reservation.getDueDate().getTime()));
+            preparedStatement.setInt(3, reservation.getBookCopy().getId());
+            preparedStatement.setInt(4, reservation.getClient().getId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

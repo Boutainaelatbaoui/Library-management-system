@@ -20,7 +20,6 @@ public class Main {
         BookCopy bookcopy = new BookCopy(1, Status.LOST, book);
         System.out.println(bookcopy.getBookCopyInfo());
 
-        Client client = new Client("John Doe", "john@example.com", "12345", 555-555-5555, "ABC123");
         DbConnection.getConnection();
     }
 }

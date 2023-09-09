@@ -1,9 +1,28 @@
 package service;
 
 import domain.entities.Book;
+import domain.entities.BookCopy;
+import domain.enums.Status;
+import repository.BookRepository;
+
 import java.util.List;
 
 public class BookService {
+    private BookRepository bookRepository;
+
+    public BookService(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
+
+    public void updateBookCopyStatus(BookCopy bookCopy, Status newStatus) {
+        bookCopy.setStatus(newStatus);
+        bookRepository.updateBookCopyStatus(bookCopy);
+    }
+    public void decreaseBookQuantity(Book book) {
+        int updatedQuantity = book.getQuantity() - 1;
+        book.setQuantity(updatedQuantity);
+        bookRepository.updateBookQuantity(book);
+    }
     public void displayBook(Book book) {
         if (book == null) {
             System.out.println("No book found.");
@@ -30,7 +49,10 @@ public class BookService {
         System.out.println("Title: " + book.getTitle());
         System.out.println("Description: " + book.getDescription());
         System.out.println("Publication Year: " + book.getPublicationYear());
+        System.out.print("\u001B[33m");
         System.out.println("ISBN: " + book.getIsbn());
+        System.out.print("\u001B[0m");
+
         System.out.println("Quantity: " + book.getQuantity());
 
         System.out.println("Author Name: " + book.getAuthor().getName());

@@ -10,8 +10,7 @@ public class Reservation {
     private BookCopy bookcopy;
 
     // Constructor
-    public Reservation(int id, Date dueDate, Date borrowingDate, Client client, BookCopy bookcopy) {
-        this.id = id;
+    public Reservation(Date dueDate, Date borrowingDate, Client client, BookCopy bookcopy) {
         this.dueDate = dueDate;
         this.borrowingDate = borrowingDate;
         this.client = client;

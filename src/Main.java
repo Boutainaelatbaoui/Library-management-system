@@ -21,8 +21,6 @@ public class Main {
         System.out.println(bookcopy.getBookCopyInfo());
 
         Client client = new Client("John Doe", "john@example.com", "12345", 555-555-5555, "ABC123");
-        Reservation reservation = new Reservation(1, new Date(), new Date(), client, bookcopy);
-        System.out.println(reservation);
         DbConnection.getConnection();
     }
 }

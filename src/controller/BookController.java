@@ -5,15 +5,15 @@ import java.util.Scanner;
 
 import domain.entities.Author;
 import domain.entities.Book;
-import repository.BookRepository;
 import repository.AuthorRepository;
+import repository.BookRepository;
 import service.BookService;
 
 public class BookController {
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
             BookRepository bookRepository = new BookRepository();
-            BookService bookService = new BookService();
+            BookService bookService = new BookService(bookRepository);
 
             while (true) {
                 printMenu();
@@ -72,7 +72,7 @@ public class BookController {
     private static int readUserChoice(Scanner scanner) {
         System.out.print("Enter your choice: ");
         int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume the newline character
+        scanner.nextLine();
         return choice;
     }
 
@@ -176,14 +176,12 @@ public class BookController {
         bookService.displayBook(book);
     }
 
-
     private static void searchByAuthor(BookRepository bookRepository, Scanner scanner, BookService bookService) {
         System.out.println("Enter an Author Name:");
         String authorNameToFind = scanner.nextLine();
         List<Book> booksByAuthor = bookRepository.getBooksByAuthor(authorNameToFind);
         bookService.displayBooks(booksByAuthor);
     }
-
 
     private static void displayAvailableBooks(BookRepository bookRepository, BookService bookService) {
         List<Book> availableBooks = bookRepository.getAllAvailableBooks();

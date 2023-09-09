@@ -9,6 +9,7 @@ import dbconnection.DbConnection;
 import domain.entities.*;
 
 public class BookRepository {
+
     public static List<Book> getAllAvailableBooks() {
         Connection connection = DbConnection.getConnection();
         List<Book> books = new ArrayList<>();
@@ -210,6 +211,34 @@ public class BookRepository {
             } else {
                 System.out.println("Failed to create the book.");
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateBookCopyStatus(BookCopy bookCopy) {
+        Connection connection = DbConnection.getConnection();
+        String query = "UPDATE book_copies SET status = ? WHERE book_copy_id = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, bookCopy.getStatus().toString());
+            preparedStatement.setInt(2, bookCopy.getId());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateBookQuantity(Book book) {
+        Connection connection = DbConnection.getConnection();
+        String query = "UPDATE books SET quantity = ? WHERE book_id = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, book.getQuantity());
+            preparedStatement.setInt(2, book.getId());
+
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }

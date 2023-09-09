@@ -1,10 +1,13 @@
 package service;
 
+import domain.entities.Book;
 import domain.entities.Client;
 import domain.entities.BookCopy;
 import domain.entities.Reservation;
 import repository.ReservationRepository;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -33,6 +36,11 @@ public class ReservationService {
     public Reservation findReservation(String isbn, int memberNum) {
         return reservationRepository.findReservation(isbn, memberNum);
     }
+
+    public boolean hasExistingReservation(Client client, Book book) {
+        return reservationRepository.hasExistingReservation(client, book);
+    }
+
 
 }
 

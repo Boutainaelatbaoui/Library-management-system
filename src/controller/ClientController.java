@@ -52,22 +52,44 @@ public class ClientController {
                             if (hasAvailableCopy) {
                                 System.out.println("This Book is Available in Our Library");
                                 bookService.displayBook(foundBook);
-                                System.out.println("Do you want to borrow the book? (yes/no)");
-                                String borrowOption = scanner.nextLine().toLowerCase();
 
-                                if (borrowOption.equals("yes")) {
-                                    Reservation reservation = reservationService.createReservation(client, copyRepository.getBookCopies(foundBook.getTitle()));
+                                boolean hasExistingReservation = reservationService.hasExistingReservation(client, foundBook);
 
-                                    bookService.updateBookCopyStatus(reservation.getBookCopy(), Status.BORROWED);
-                                    bookService.decreaseBookQuantity(foundBook);
-
-                                    displayReservationInformation(reservation);
-                                } else {
+                                if (hasExistingReservation) {
+                                    System.out.println("You have already borrowed this book.");
                                     System.out.println("No reservation created.");
+                                } else {
+                                    Reservation existingReservation = reservationService.findReservation(foundBook.getIsbn(), client.getMemberNum());
+
+                                    if (existingReservation != null) {
+                                        System.out.println("You have already reserved this book.");
+                                        System.out.println("No reservation created.");
+                                    } else {
+                                        System.out.println("Do you want to borrow the book? (yes/no)");
+                                        String borrowOption = scanner.nextLine().toLowerCase();
+
+                                        if (borrowOption.equals("yes")) {
+                                            int clientReservationCount = reservationRepository.countReservationsForClient(client);
+                                            if (clientReservationCount >= 5) {
+                                                System.out.println("You have already reached the maximum limit of reservations.");
+                                                System.out.println("No reservation created.");
+                                            } else {
+                                                Reservation reservation = reservationService.createReservation(client, copyRepository.getBookCopies(foundBook.getTitle()));
+
+                                                bookService.updateBookCopyStatus(reservation.getBookCopy(), Status.BORROWED);
+                                                bookService.decreaseBookQuantity(foundBook);
+
+                                                displayReservationInformation(reservation);
+                                            }
+                                        } else {
+                                            System.out.println("No reservation created.");
+                                        }
+                                    }
                                 }
                             } else {
                                 System.out.println("No available copies of the book.");
                             }
+
                         } else {
                             System.out.println("Book not found.");
                         }

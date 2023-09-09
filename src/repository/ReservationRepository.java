@@ -90,5 +90,48 @@ public class ReservationRepository {
         return null;
     }
 
+    public int countReservationsForClient(Client client) {
+        String query = "SELECT COUNT(*) AS reservation_count FROM reservations WHERE client_id = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, client.getId());
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("reservation_count");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    public boolean hasExistingReservation(Client client, Book book) {
+        String query = "SELECT COUNT(*) AS reservation_count " +
+                "FROM reservations " +
+                "INNER JOIN bookcopies ON reservations.bookcopy_id = bookcopies.bookcopy_id " +
+                "WHERE reservations.client_id = ? AND bookcopies.book_id = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, client.getId());
+            preparedStatement.setInt(2, book.getId());
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    int reservationCount = resultSet.getInt("reservation_count");
+                    return reservationCount > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+
+
 }
 

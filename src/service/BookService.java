@@ -22,6 +22,20 @@ public class BookService {
         book.setQuantity(book.getQuantity() - 1);
         bookRepository.updateBookQuantity(book);
     }
+
+    public void displayStatistics() {
+        int totalBooks = bookRepository.getTotalNumberOfBooks();
+        int availableBookCopies = bookRepository.getTotalNumberOfBookcopies();
+        int returnedBookCopies = bookRepository.getTotalNumberOfBookCopiesWithStatus("RETURNED");
+        int lostBookCopies = bookRepository.getTotalNumberOfBookCopiesWithStatus("LOST");
+
+        System.out.println("Library Statistics:");
+        System.out.println("Total Books: " + totalBooks);
+        System.out.println("Total Available Book Copies: " + availableBookCopies);
+        System.out.println("Returned Book Copies: " + returnedBookCopies);
+        System.out.println("Lost Book Copies: " + lostBookCopies);
+    }
+
     public void displayBook(Book book) {
         if (book == null) {
             System.out.println("No book found.");

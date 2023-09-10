@@ -243,6 +243,56 @@ public class BookRepository {
             e.printStackTrace();
         }
     }
+    public int getTotalNumberOfBookCopiesWithStatus(String status) {
+        Connection connection = DbConnection.getConnection();
+        String query = "SELECT COUNT(*) AS total_book_copies FROM bookcopies WHERE status = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, status);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("total_book_copies");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+    public int getTotalNumberOfBooks() {
+        Connection connection = DbConnection.getConnection();
+        String query = "SELECT COUNT(*) AS total_books FROM books";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            if (resultSet.next()) {
+                return resultSet.getInt("total_books");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+    public int getTotalNumberOfBookcopies() {
+        Connection connection = DbConnection.getConnection();
+        String query = "SELECT COUNT(*) AS total_books FROM bookcopies WHERE status = 'AVAILABLE' OR status = 'RETURNED'";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            if (resultSet.next()) {
+                return resultSet.getInt("total_books");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+
 }
 
 

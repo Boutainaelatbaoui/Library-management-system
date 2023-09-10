@@ -81,6 +81,9 @@ public class BookController {
                         }
                         break;
                     case 10:
+                        bookService.displayStatistics();
+                        break;
+                    case 11:
                         System.out.println("Exiting the application.");
                         return;
                     default:
@@ -101,6 +104,7 @@ public class BookController {
         System.out.println("7. Display Available Books");
         System.out.println("8. Borrow a Book");
         System.out.println("9. Return a Book");
+        System.out.println("9. Display Statictics");
         System.out.println("10. Exit");
         System.out.println("**************************************************");
     }

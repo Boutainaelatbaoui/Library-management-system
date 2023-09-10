@@ -25,7 +25,7 @@ public class ClientController {
         ClientService clientService = new ClientService(clientRepository);
         ReservationRepository reservationRepository = new ReservationRepository(connection);
         ReservationService reservationService = new ReservationService(reservationRepository);
-        BookRepository bookRepository = new BookRepository();
+        BookRepository bookRepository = new BookRepository(connection);
         CopyRepository copyRepository = new CopyRepository(connection);
         CopyService copyService = new CopyService();
         BookService bookService = new BookService(bookRepository);

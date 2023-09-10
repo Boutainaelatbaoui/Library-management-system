@@ -20,7 +20,7 @@ public class BookController {
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
             Connection connection = DbConnection.getConnection();
-            BookRepository bookRepository = new BookRepository();
+            BookRepository bookRepository = new BookRepository(connection);
             BookService bookService = new BookService(bookRepository);
             ReservationRepository reservationRepository = new ReservationRepository(connection);
             ReservationService reservationService = new ReservationService(reservationRepository);

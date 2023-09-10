@@ -22,8 +22,6 @@ public class Main {
         BookCopy bookcopy = new BookCopy(1, Status.LOST, book);
         System.out.println(bookcopy.getBookCopyInfo());
 
-        BookService bookService = new BookService(new BookRepository());
-        bookService.decreaseBookQuantity(book);
 
         DbConnection.getConnection();
     }

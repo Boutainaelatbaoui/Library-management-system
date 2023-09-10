@@ -9,9 +9,13 @@ import dbconnection.DbConnection;
 import domain.entities.*;
 
 public class BookRepository {
+    private Connection connection;
 
-    public static List<Book> getAllAvailableBooks() {
-        Connection connection = DbConnection.getConnection();
+    public BookRepository(Connection connection) {
+        this.connection = connection;
+    }
+
+    public List<Book> getAllAvailableBooks() {
         List<Book> books = new ArrayList<>();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT b.*, a.* FROM books AS b " +
@@ -45,8 +49,7 @@ public class BookRepository {
         return books;
     }
 
-    public static List<Book> getAllBooks() {
-        Connection connection = DbConnection.getConnection();
+    public List<Book> getAllBooks() {
         List<Book> books = new ArrayList<>();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM books " +
@@ -140,7 +143,6 @@ public class BookRepository {
     }
 
     public Book getBookByTitle(String bookTitle) {
-        Connection connection = DbConnection.getConnection();
         String query = "SELECT * " +
                 "FROM books b " +
                 "INNER JOIN authors a ON b.author_id = a.author_id " +
@@ -175,7 +177,6 @@ public class BookRepository {
     }
 
     public void deleteBook(String bookTitle) {
-        Connection connection = DbConnection.getConnection();
         String deleteQuery = "DELETE FROM books WHERE title = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
@@ -193,7 +194,6 @@ public class BookRepository {
     }
 
     public void updateBook(String bookTitle, Book book){
-        Connection connection = DbConnection.getConnection();
         String updateQuery = "UPDATE books SET title = ?, description = ?, publication_year = ?, isbn = ?, quantity = ?, author_id = ? WHERE title = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
@@ -217,7 +217,6 @@ public class BookRepository {
     }
 
     public void updateBookCopyStatus(BookCopy bookCopy) {
-        Connection connection = DbConnection.getConnection();
         String query = "UPDATE bookcopies SET status = ? WHERE bookcopy_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -231,7 +230,6 @@ public class BookRepository {
     }
 
     public void updateBookQuantity(Book book) {
-        Connection connection = DbConnection.getConnection();
         String query = "UPDATE books SET quantity = ? WHERE book_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -244,7 +242,6 @@ public class BookRepository {
         }
     }
     public int getTotalNumberOfBookCopiesWithStatus(String status) {
-        Connection connection = DbConnection.getConnection();
         String query = "SELECT COUNT(*) AS total_book_copies FROM bookcopies WHERE status = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -262,7 +259,6 @@ public class BookRepository {
         return 0;
     }
     public int getTotalNumberOfBooks() {
-        Connection connection = DbConnection.getConnection();
         String query = "SELECT COUNT(*) AS total_books FROM books";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -277,7 +273,6 @@ public class BookRepository {
         return 0;
     }
     public int getTotalNumberOfBookcopies() {
-        Connection connection = DbConnection.getConnection();
         String query = "SELECT COUNT(*) AS total_books FROM bookcopies WHERE status = 'AVAILABLE' OR status = 'RETURNED'";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query);

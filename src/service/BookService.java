@@ -2,8 +2,10 @@ package service;
 
 import domain.entities.Book;
 import domain.entities.BookCopy;
+import domain.entities.Reservation;
 import domain.enums.Status;
 import repository.BookRepository;
+import repository.ReservationRepository;
 
 import java.util.List;
 
@@ -22,6 +24,25 @@ public class BookService {
         book.setQuantity(book.getQuantity() - 1);
         bookRepository.updateBookQuantity(book);
     }
+    public void updateLostBookCopiesStatus(ReservationRepository reservationRepository, BookRepository bookRepository) {
+        List<Reservation> expiredReservations = reservationRepository.getExpiredReservations();
+        boolean updatesMade = false;
+
+        for (Reservation reservation : expiredReservations) {
+            if (reservation.getBookCopy().getStatus() != Status.LOST) {
+                reservation.getBookCopy().setStatus(Status.LOST);
+                bookRepository.updateBookCopyStatus(reservation.getBookCopy());
+                updatesMade = true;
+            }
+        }
+
+        if (updatesMade) {
+            System.out.println("Book copies with expired due dates have been marked as LOST.");
+        } else {
+            System.out.println("No book copies with expired due dates found.");
+        }
+    }
+
 
     public void displayStatistics() {
         int totalBooks = bookRepository.getTotalNumberOfBooks();

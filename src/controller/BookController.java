@@ -84,6 +84,9 @@ public class BookController {
                         bookService.displayStatistics();
                         break;
                     case 11:
+                        bookService.updateLostBookCopiesStatus(reservationRepository, bookRepository);
+                        break;
+                    case 12:
                         System.out.println("Exiting the application.");
                         return;
                     default:
@@ -104,8 +107,9 @@ public class BookController {
         System.out.println("7. Display Available Books");
         System.out.println("8. Borrow a Book");
         System.out.println("9. Return a Book");
-        System.out.println("9. Display Statictics");
-        System.out.println("10. Exit");
+        System.out.println("10. Display Statictics");
+        System.out.println("11. Added 'lost' status to unreturned books");
+        System.out.println("12. Exist");
         System.out.println("**************************************************");
     }
 

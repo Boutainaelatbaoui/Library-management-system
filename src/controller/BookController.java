@@ -125,85 +125,120 @@ public class BookController {
         bookService.displayBooks(books);
     }
 
-    private static void createBook(BookRepository bookRepository, Scanner scanner) {
-        System.out.println("Enter Book Title:");
-        String title = scanner.nextLine();
-
-        System.out.println("Enter Book Description:");
-        String description = scanner.nextLine();
-
-        System.out.println("Enter Publication Year:");
-        String publicationYear = scanner.nextLine();
-
-        System.out.println("Enter ISBN:");
-        String isbn = scanner.nextLine();
-
-        System.out.println("Enter Quantity:");
-        int quantity = Integer.parseInt(scanner.nextLine());
+    public static void createBook(BookRepository bookRepository, Scanner scanner) {
+        String title = getNonEmptyStringInput(scanner, "Book Title");
+        String description = getNonEmptyStringInput(scanner, "Book Description");
+        int publicationYear = getPositiveIntegerInput(scanner, "Publication Year");
+        String isbn = getISBNInput(scanner);
+        int quantity = getPositiveIntegerInput(scanner, "Quantity");
 
         AuthorRepository authorRepository = new AuthorRepository();
-        List<Author> authorsList = authorRepository.getAllAuthors();
+        Author selectedAuthor = null;
 
-        System.out.println("Select an Author:");
+        while (selectedAuthor == null) {
+            selectedAuthor = selectAuthor(authorRepository, scanner);
 
-        for (int i = 0; i < authorsList.size(); i++) {
-            Author author = authorsList.get(i);
-            System.out.println((i + 1) + ". " + author.getName());
+            if (selectedAuthor == null) {
+                System.out.println("Invalid author selection. Please try again.");
+            }
         }
 
-        int authorChoice = Integer.parseInt(scanner.nextLine());
+        Book book = new Book(title, description, String.valueOf(publicationYear), isbn, quantity, selectedAuthor);
+        bookRepository.createBook(book);
+    }
 
-        if (authorChoice >= 1 && authorChoice <= authorsList.size()) {
-            Author selectedAuthor = authorsList.get(authorChoice - 1);
+    public static void updateBook(BookRepository bookRepository, Scanner scanner) {
+        System.out.println("Enter Book Title to update:");
+        String bookTitleToUpdate = getNonEmptyStringInput(scanner, "Book Title to update");
 
-            Book book = new Book(title, description, publicationYear, isbn, quantity, selectedAuthor);
+        Book existingBook = bookRepository.getBookByTitle(bookTitleToUpdate);
 
-            bookRepository.createBook(book);
+        if (existingBook != null) {
+            String title = getNonEmptyStringInput(scanner, "New Title");
+
+            String description = getNonEmptyStringInput(scanner, "New Description");
+
+            int publicationYear = getPositiveIntegerInput(scanner, "New Publication Year");
+
+            String isbn = getISBNInput(scanner);
+
+            int quantity = getPositiveIntegerInput(scanner, "New Quantity");
+
+            AuthorRepository authorRepository = new AuthorRepository();
+            Author selectedAuthor = null;
+
+            while (selectedAuthor == null) {
+                selectedAuthor = selectAuthor(authorRepository, scanner);
+
+                if (selectedAuthor == null) {
+                    System.out.println("Invalid author selection. Please try again.");
+                }
+            }
+
+            Book updatedBook = new Book(title, description, String.valueOf(publicationYear), isbn, quantity, selectedAuthor);
+            bookRepository.updateBook(bookTitleToUpdate, updatedBook);
+
         } else {
-            System.out.println("Invalid author selection.");
+            System.out.println("Book not found. Update failed.");
         }
     }
 
-    private static void updateBook(BookRepository bookRepository, Scanner scanner) {
-        System.out.println("Enter Book Title to update:");
-        String bookTitleToUpdate = scanner.nextLine();
+    private static String getNonEmptyStringInput(Scanner scanner, String prompt) {
+        String input;
+        do {
+            System.out.println("Enter " + prompt + ":");
+            input = scanner.nextLine().trim();
+            if (input.isEmpty()) {
+                System.out.println("Invalid input. Please enter a non-empty string.");
+            }
+        } while (input.isEmpty());
+        return input;
+    }
+    private static int getPositiveIntegerInput(Scanner scanner, String prompt) {
+        int input;
+        do {
+            System.out.println("Enter " + prompt + ":");
+            while (!scanner.hasNextInt()) {
+                System.out.println("Invalid input. Please enter a positive integer.");
+                scanner.next();
+            }
+            input = scanner.nextInt();
+        } while (input <= 0);
+        scanner.nextLine();
+        return input;
+    }
 
-        System.out.println("Enter New Title:");
-        String title = scanner.nextLine();
+    private static String getISBNInput(Scanner scanner) {
+        String isbn;
+        do {
+            System.out.println("Enter ISBN:");
+            isbn = scanner.nextLine().trim();
 
-        System.out.println("Enter New Description:");
-        String description = scanner.nextLine();
+            if (!isValidISBN(isbn)) {
+                System.out.println("Invalid input. Please enter a correct ISBN.");
+            }
+        } while (!isValidISBN(isbn));
+        return isbn;
+    }
 
-        System.out.println("Enter New Publication Year:");
-        String publicationYear = scanner.nextLine();
+    private static boolean isValidISBN(String isbn) {
+        return isbn.matches("\\d{3}-\\d{10}");
+    }
 
-        System.out.println("Enter New ISBN:");
-        String isbn = scanner.nextLine();
-
-        System.out.println("Enter New Quantity:");
-        int quantity = Integer.parseInt(scanner.nextLine());
-
-        AuthorRepository authorRepository = new AuthorRepository();
+    private static Author selectAuthor(AuthorRepository authorRepository, Scanner scanner) {
         List<Author> authorsList = authorRepository.getAllAuthors();
-
-        System.out.println("Select a New Author:");
-
+        System.out.println("Select an Author:");
         for (int i = 0; i < authorsList.size(); i++) {
             Author author = authorsList.get(i);
             System.out.println((i + 1) + ". " + author.getName());
         }
 
-        int authorChoice = Integer.parseInt(scanner.nextLine());
+        int authorChoice = getPositiveIntegerInput(scanner, "Author Choice");
 
         if (authorChoice >= 1 && authorChoice <= authorsList.size()) {
-            Author selectedAuthor = authorsList.get(authorChoice - 1);
-
-            Book book = new Book(title, description, publicationYear, isbn, quantity, selectedAuthor);
-
-            bookRepository.updateBook(bookTitleToUpdate, book);
-        } else {
-            System.out.println("Invalid author selection.");
+            return authorsList.get(authorChoice - 1);
         }
+        return null;
     }
 
     private static void deleteBook(BookRepository bookRepository, Scanner scanner) {

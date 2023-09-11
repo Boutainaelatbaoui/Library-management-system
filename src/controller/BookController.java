@@ -148,8 +148,28 @@ public class BookController {
 
             if (selectedAuthor == null) {
                 System.out.println("Invalid author selection. Please try again.");
+
+                System.out.print("Create a new author? (yes/no): ");
+                String createAuthorOption = scanner.nextLine().toLowerCase();
+
+                if (createAuthorOption.equals("yes")) {
+                    String authorName = getNonEmptyStringInput(scanner, "Author Name");
+
+                    Author existingAuthor = authorRepository.findAuthorByName(authorName);
+
+                    if (existingAuthor != null) {
+                        System.out.println("Author with the same name already exists.");
+                    } else {
+                        String biography = getNonEmptyStringInput(scanner, "New Biography");
+                        String birthdate = getNonEmptyStringInput(scanner, "New Birthdate");
+                        Author newAuthor = new Author(authorName, biography, birthdate);
+                        authorRepository.createAuthor(newAuthor);
+                        selectedAuthor = selectAuthor(authorRepository, scanner);
+                    }
+                }
             }
         }
+
 
         Book book = new Book(title, description, String.valueOf(publicationYear), isbn, quantity, selectedAuthor);
         bookRepository.createBook(book);

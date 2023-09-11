@@ -9,8 +9,7 @@ public class Author {
 
 
     // Constructor
-    public Author(int id, String name, String biography, String birthdate) {
-        this.id = id;
+    public Author(String name, String biography, String birthdate) {
         this.name = name;
         this.biography = biography;
         this.birthdate = birthdate;

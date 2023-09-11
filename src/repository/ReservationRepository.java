@@ -68,7 +68,7 @@ public class ReservationRepository {
                     String authorBiography = resultSet.getString("biography");
                     String authorBirthdate = resultSet.getString("birthdate");
 
-                    Author author = new Author(authorId, authorName, authorBiography, authorBirthdate);
+                    Author author = new Author(authorName, authorBiography, authorBirthdate);
 
                     Book book = new Book(title, description, publicationYear, isbn, quantity, author);
 
@@ -173,7 +173,7 @@ public class ReservationRepository {
             String authorBiography = resultSet.getString("biography");
             String authorBirthdate = resultSet.getString("birthdate");
 
-            Author author = new Author(authorId, authorName, authorBiography, authorBirthdate);
+            Author author = new Author(authorName, authorBiography, authorBirthdate);
 
             Book book = new Book(title, description, publicationYear, isbn, quantity, author);
 

@@ -44,7 +44,7 @@ public class ClientController {
                     Client client = clientService.checkClientExistence(cin, scanner);
 
                     if (client != null) {
-                        Book foundBook = searchByTitle(bookRepository, scanner);
+                        Book foundBook = searchByISBN(bookRepository, scanner);
 
                         if (foundBook != null) {
                             boolean hasAvailableCopy = copyService.hasAvailableBookCopy(foundBook.getTitle(), copyRepository);
@@ -105,10 +105,10 @@ public class ClientController {
     }
 
 
-    public static Book searchByTitle(BookRepository bookRepository, Scanner scanner) {
-        System.out.println("Enter a Title:");
-        String bookTitleToFind = scanner.nextLine();
-        Book book = bookRepository.getBookByTitle(bookTitleToFind);
+    public static Book searchByISBN(BookRepository bookRepository, Scanner scanner) {
+        System.out.println("Enter an ISBN:");
+        String bookISBNToFind = scanner.nextLine();
+        Book book = bookRepository.getBookByIsbn(bookISBNToFind);
         return book;
     }
 

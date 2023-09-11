@@ -114,10 +114,18 @@ public class BookController {
     }
 
     private static int readUserChoice(Scanner scanner) {
-        System.out.print("Enter your choice: ");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
-        return choice;
+        int choice;
+        while (true) {
+            System.out.print("Enter your choice: ");
+            if (scanner.hasNextInt()) {
+                choice = scanner.nextInt();
+                scanner.nextLine();
+                return choice;
+            } else {
+                System.out.println("Invalid input. Please enter a valid number.");
+                scanner.nextLine();
+            }
+        }
     }
 
     private static void displayAllBooks(BookRepository bookRepository, BookService bookService) {

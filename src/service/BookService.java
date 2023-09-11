@@ -46,15 +46,17 @@ public class BookService {
 
     public void displayStatistics() {
         int totalBooks = bookRepository.getTotalNumberOfBooks();
-        int availableBookCopies = bookRepository.getTotalNumberOfBookcopies();
+        int availableReturnBookCopies = bookRepository.getTotalNumberOfBookcopies();
         int returnedBookCopies = bookRepository.getTotalNumberOfBookCopiesWithStatus("RETURNED");
         int lostBookCopies = bookRepository.getTotalNumberOfBookCopiesWithStatus("LOST");
+        int borrowedBookCopies = bookRepository.getTotalNumberOfBookCopiesWithStatus("BORROWED");
 
         System.out.println("Library Statistics:");
         System.out.println("Total Books: " + totalBooks);
-        System.out.println("Total Available Book Copies: " + availableBookCopies);
+        System.out.println("Total Available Book Copies: " + availableReturnBookCopies);
         System.out.println("Returned Book Copies: " + returnedBookCopies);
         System.out.println("Lost Book Copies: " + lostBookCopies);
+        System.out.println("Total Borrowed Book Copies: " + borrowedBookCopies);
     }
 
     public void displayBook(Book book) {

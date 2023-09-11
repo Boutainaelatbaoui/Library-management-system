@@ -21,7 +21,7 @@ public class BookRepository {
         try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT b.*, a.* FROM books AS b " +
                 "INNER JOIN bookcopies AS bc ON b.book_id = bc.book_id " +
                 "INNER JOIN authors AS a ON b.author_id = a.author_id " +
-                "WHERE bc.status = 'AVAILABLE'");
+                "WHERE bc.status = 'AVAILABLE' OR bc.status = 'RETURNED'");
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
@@ -286,8 +286,6 @@ public class BookRepository {
 
         return 0;
     }
-
-
 }
 
 

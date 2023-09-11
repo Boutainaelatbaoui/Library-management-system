@@ -176,20 +176,16 @@ public class BookController {
     }
 
     public static void updateBook(BookRepository bookRepository, Scanner scanner) {
-        System.out.println("Enter Book Title to update:");
-        String bookTitleToUpdate = getNonEmptyStringInput(scanner, "Book Title to update");
+        System.out.println("Enter Book ISBN to update:");
+        String bookIsbnToUpdate = getISBNInput(scanner);
 
-        Book existingBook = bookRepository.getBookByTitle(bookTitleToUpdate);
+        Book existingBook = bookRepository.getBookByIsbn(bookIsbnToUpdate);
 
         if (existingBook != null) {
             String title = getNonEmptyStringInput(scanner, "New Title");
-
             String description = getNonEmptyStringInput(scanner, "New Description");
-
             int publicationYear = getPositiveIntegerInput(scanner, "New Publication Year");
-
             String isbn = getISBNInput(scanner);
-
             int quantity = getPositiveIntegerInput(scanner, "New Quantity");
 
             AuthorRepository authorRepository = new AuthorRepository();
@@ -204,12 +200,12 @@ public class BookController {
             }
 
             Book updatedBook = new Book(title, description, String.valueOf(publicationYear), isbn, quantity, selectedAuthor);
-            bookRepository.updateBook(bookTitleToUpdate, updatedBook);
-
+            bookRepository.updateBookByIsbn(bookIsbnToUpdate, updatedBook);
         } else {
             System.out.println("Book not found. Update failed.");
         }
     }
+
 
     private static String getNonEmptyStringInput(Scanner scanner, String prompt) {
         String input;

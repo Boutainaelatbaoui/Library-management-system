@@ -176,6 +176,40 @@ public class BookRepository {
         return null;
     }
 
+    public Book getBookByIsbn(String bookIsbn) {
+        String query = "SELECT * " +
+                "FROM books b " +
+                "INNER JOIN authors a ON b.author_id = a.author_id " +
+                "WHERE b.isbn = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, bookIsbn);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    int id = resultSet.getInt("book_id");
+                    String description = resultSet.getString("description");
+                    String publicationYear = resultSet.getString("publication_year");
+                    String bookTitle = resultSet.getString("title");
+                    int quantity = resultSet.getInt("quantity");
+
+                    int authorId = resultSet.getInt("author_id");
+                    String authorName = resultSet.getString("name");
+                    String authorBiography = resultSet.getString("biography");
+                    String authorBirthdate = resultSet.getString("birthdate");
+
+                    Author author = new Author(authorName, authorBiography, authorBirthdate);
+                    Book book = new Book(bookTitle, description, publicationYear, bookIsbn, quantity, author);
+                    return book;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public void deleteBook(String bookTitle) {
         String deleteQuery = "DELETE FROM books WHERE title = ?";
 
@@ -193,8 +227,8 @@ public class BookRepository {
         }
     }
 
-    public void updateBook(String bookTitle, Book book){
-        String updateQuery = "UPDATE books SET title = ?, description = ?, publication_year = ?, isbn = ?, quantity = ?, author_id = ? WHERE title = ?";
+    public void updateBookByIsbn(String bookIsbn, Book book) {
+        String updateQuery = "UPDATE books SET title = ?, description = ?, publication_year = ?, isbn = ?, quantity = ?, author_id = ? WHERE isbn = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
             preparedStatement.setString(1, book.getTitle());
@@ -203,13 +237,13 @@ public class BookRepository {
             preparedStatement.setString(4, book.getIsbn());
             preparedStatement.setInt(5, book.getQuantity());
             preparedStatement.setInt(6, book.getAuthor().getId());
-            preparedStatement.setString(7, bookTitle);
+            preparedStatement.setString(7, bookIsbn);
 
-            int rowsInserted = preparedStatement.executeUpdate();
-            if (rowsInserted > 0) {
+            int rowsUpdated = preparedStatement.executeUpdate();
+            if (rowsUpdated > 0) {
                 System.out.println("Book updated successfully.");
             } else {
-                System.out.println("Failed to create the book.");
+                System.out.println("Failed to update the book.");
             }
         } catch (SQLException e) {
             e.printStackTrace();

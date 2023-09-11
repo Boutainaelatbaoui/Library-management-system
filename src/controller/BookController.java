@@ -266,10 +266,10 @@ public class BookController {
     }
 
     private static void deleteBook(BookRepository bookRepository, Scanner scanner) {
-        System.out.println("Enter Book Title to delete:");
-        String bookTitleToDelete = scanner.nextLine();
+        System.out.println("Enter Book ISBN to delete:");
+        String bookIsbnToDelete = scanner.nextLine();
 
-        bookRepository.deleteBook(bookTitleToDelete);
+        bookRepository.deleteBookByIsbn(bookIsbnToDelete);
     }
 
     public static void searchByTitle(BookRepository bookRepository, Scanner scanner, BookService bookService) {

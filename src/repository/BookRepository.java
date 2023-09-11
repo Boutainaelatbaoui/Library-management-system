@@ -210,11 +210,11 @@ public class BookRepository {
         return null;
     }
 
-    public void deleteBook(String bookTitle) {
-        String deleteQuery = "DELETE FROM books WHERE title = ?";
+    public void deleteBookByIsbn(String bookIsbn) {
+        String deleteQuery = "DELETE FROM books WHERE isbn = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
-            preparedStatement.setString(1, bookTitle);
+            preparedStatement.setString(1, bookIsbn);
 
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {

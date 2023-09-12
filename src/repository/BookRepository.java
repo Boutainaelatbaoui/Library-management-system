@@ -30,7 +30,6 @@ public class BookRepository {
                 String description = resultSet.getString("description");
                 String publicationYear = resultSet.getString("publication_year");
                 String isbn = resultSet.getString("isbn");
-                int quantity = resultSet.getInt("quantity");
 
                 int authorId = resultSet.getInt("author_id");
                 String authorName = resultSet.getString("name");
@@ -39,7 +38,7 @@ public class BookRepository {
 
                 Author author = new Author(authorName, authorBiography, authorBirthdate);
 
-                Book book = new Book(title, description, publicationYear, isbn, quantity, author);
+                Book book = new Book(title, description, publicationYear, isbn, author);
                 books.add(book);
             }
         } catch (SQLException e) {
@@ -62,7 +61,6 @@ public class BookRepository {
                 String description = resultSet.getString("description");
                 String publicationYear = resultSet.getString("publication_year");
                 String isbn = resultSet.getString("isbn");
-                int quantity = resultSet.getInt("quantity");
 
                 int authorId = resultSet.getInt("author_id");
                 String authorName = resultSet.getString("name");
@@ -71,7 +69,7 @@ public class BookRepository {
 
                 Author author = new Author(authorName, authorBiography, authorBirthdate);
 
-                Book book = new Book(title, description, publicationYear, isbn, quantity, author);
+                Book book = new Book(title, description, publicationYear, isbn, author);
                 books.add(book);
             }
         } catch (SQLException e) {
@@ -83,15 +81,14 @@ public class BookRepository {
 
     public void createBook(Book book) {
         Connection connection = DbConnection.getConnection();
-        String insertQuery = "INSERT INTO books (title, description, publication_year, isbn, quantity, author_id) VALUES (?, ?, ?, ?, ?, ?)";
+        String insertQuery = "INSERT INTO books (title, description, publication_year, isbn, author_id) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
             preparedStatement.setString(1, book.getTitle());
             preparedStatement.setString(2, book.getDescription());
             preparedStatement.setString(3, book.getPublicationYear());
             preparedStatement.setString(4, book.getIsbn());
-            preparedStatement.setInt(5, book.getQuantity());
-            preparedStatement.setInt(6, book.getAuthor().getId());
+            preparedStatement.setInt(5, book.getAuthor().getId());
 
             int rowsInserted = preparedStatement.executeUpdate();
             if (rowsInserted > 0) {
@@ -123,7 +120,6 @@ public class BookRepository {
                     String description = resultSet.getString("description");
                     String publicationYear = resultSet.getString("publication_year");
                     String isbn = resultSet.getString("isbn");
-                    int quantity = resultSet.getInt("quantity");
 
                     int authorId = resultSet.getInt("author_id");
                     String authorBiography = resultSet.getString("biography");
@@ -131,7 +127,7 @@ public class BookRepository {
 
                     Author author = new Author(authorName, authorBiography, authorBirthdate);
 
-                    Book book = new Book(title, description, publicationYear, isbn, quantity, author);
+                    Book book = new Book(title, description, publicationYear, isbn, author);
                     books.add(book);
                 }
             }
@@ -157,7 +153,6 @@ public class BookRepository {
                     String description = resultSet.getString("description");
                     String publicationYear = resultSet.getString("publication_year");
                     String isbn = resultSet.getString("isbn");
-                    int quantity = resultSet.getInt("quantity");
 
                     int authorId = resultSet.getInt("author_id");
                     String authorName = resultSet.getString("name");
@@ -165,7 +160,7 @@ public class BookRepository {
                     String authorBirthdate = resultSet.getString("birthdate");
 
                     Author author = new Author(authorName, authorBiography, authorBirthdate);
-                    Book book = new Book(bookTitle, description, publicationYear, isbn, quantity, author);
+                    Book book = new Book(bookTitle, description, publicationYear, isbn, author);
                     return book;
                 }
             }
@@ -174,6 +169,21 @@ public class BookRepository {
         }
 
         return null;
+    }
+
+    public void createBookCopy(BookCopy bookCopy) {
+        String insertQuery = "INSERT INTO bookcopies (status, book_id) VALUES (?, ?)";
+
+        try (Connection connection = DbConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+            preparedStatement.setString(1, bookCopy.getStatus().toString());
+            preparedStatement.setInt(2, bookCopy.getBook().getId());
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public Book getBookByIsbn(String bookIsbn) {
@@ -191,7 +201,6 @@ public class BookRepository {
                     String description = resultSet.getString("description");
                     String publicationYear = resultSet.getString("publication_year");
                     String bookTitle = resultSet.getString("title");
-                    int quantity = resultSet.getInt("quantity");
 
                     int authorId = resultSet.getInt("author_id");
                     String authorName = resultSet.getString("name");
@@ -199,7 +208,7 @@ public class BookRepository {
                     String authorBirthdate = resultSet.getString("birthdate");
 
                     Author author = new Author(authorName, authorBiography, authorBirthdate);
-                    Book book = new Book(bookTitle, description, publicationYear, bookIsbn, quantity, author);
+                    Book book = new Book(bookTitle, description, publicationYear, bookIsbn, author);
                     return book;
                 }
             }
@@ -228,16 +237,15 @@ public class BookRepository {
     }
 
     public void updateBookByIsbn(String bookIsbn, Book book) {
-        String updateQuery = "UPDATE books SET title = ?, description = ?, publication_year = ?, isbn = ?, quantity = ?, author_id = ? WHERE isbn = ?";
+        String updateQuery = "UPDATE books SET title = ?, description = ?, publication_year = ?, isbn = ?, author_id = ? WHERE isbn = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
             preparedStatement.setString(1, book.getTitle());
             preparedStatement.setString(2, book.getDescription());
             preparedStatement.setString(3, book.getPublicationYear());
             preparedStatement.setString(4, book.getIsbn());
-            preparedStatement.setInt(5, book.getQuantity());
-            preparedStatement.setInt(6, book.getAuthor().getId());
-            preparedStatement.setString(7, bookIsbn);
+            preparedStatement.setInt(5, book.getAuthor().getId());
+            preparedStatement.setString(6, bookIsbn);
 
             int rowsUpdated = preparedStatement.executeUpdate();
             if (rowsUpdated > 0) {
@@ -263,18 +271,6 @@ public class BookRepository {
         }
     }
 
-    public void updateBookQuantity(Book book) {
-        String query = "UPDATE books SET quantity = ? WHERE book_id = ?";
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, book.getQuantity());
-            preparedStatement.setInt(2, book.getId());
-
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
     public int getTotalNumberOfBookCopiesWithStatus(String status) {
         String query = "SELECT COUNT(*) AS total_book_copies FROM bookcopies WHERE status = ?";
 
@@ -284,6 +280,24 @@ public class BookRepository {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     return resultSet.getInt("total_book_copies");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    public int getBookID(Book book) {
+        String query = "SELECT book_id AS id FROM books WHERE title = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, book.getTitle());
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("id");
                 }
             }
         } catch (SQLException e) {

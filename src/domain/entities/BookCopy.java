@@ -8,8 +8,7 @@ public class BookCopy {
     private Book book;
 
     // Constructor
-    public BookCopy(int id, Status status, Book book) {
-        this.id = id;
+    public BookCopy(Status status, Book book) {
         this.status = status;
         this.book = book;
     }
@@ -36,6 +35,10 @@ public class BookCopy {
 
     public String getBookCopyInfo() {
         return id + " " + status;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override

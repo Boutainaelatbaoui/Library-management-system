@@ -61,18 +61,17 @@ public class ReservationRepository {
                     String title = resultSet.getString("title");
                     String description = resultSet.getString("description");
                     String publicationYear = resultSet.getString("publication_year");
-                    int quantity = resultSet.getInt("quantity");
 
-                    int authorId = resultSet.getInt("author_id");
                     String authorName = resultSet.getString("name");
                     String authorBiography = resultSet.getString("biography");
                     String authorBirthdate = resultSet.getString("birthdate");
 
                     Author author = new Author(authorName, authorBiography, authorBirthdate);
 
-                    Book book = new Book(title, description, publicationYear, isbn, quantity, author);
+                    Book book = new Book(title, description, publicationYear, isbn, author);
 
-                    BookCopy bookCopy = new BookCopy(bookCopyId, Status.AVAILABLE, book);
+                    BookCopy bookCopy = new BookCopy(Status.AVAILABLE, book);
+                    bookCopy.setId(bookCopyId);
 
                     Client client = new Client();
                     client.setId(resultSet.getInt("client_id"));
@@ -157,27 +156,25 @@ public class ReservationRepository {
     }
     private Reservation extractReservationFromResultSet(ResultSet resultSet) {
         try {
-            int reservationId = resultSet.getInt("reservation_id");
             Date dueDate = resultSet.getDate("due_date");
             Date borrowingDate = resultSet.getDate("borrowing_date");
-            int bookCopyId = resultSet.getInt("bookcopy_id");
 
             String title = resultSet.getString("title");
             String description = resultSet.getString("description");
             String publicationYear = resultSet.getString("publication_year");
             String isbn = resultSet.getString("isbn");
-            int quantity = resultSet.getInt("quantity");
 
-            int authorId = resultSet.getInt("author_id");
             String authorName = resultSet.getString("name");
             String authorBiography = resultSet.getString("biography");
             String authorBirthdate = resultSet.getString("birthdate");
 
             Author author = new Author(authorName, authorBiography, authorBirthdate);
 
-            Book book = new Book(title, description, publicationYear, isbn, quantity, author);
+            Book book = new Book(title, description, publicationYear, isbn, author);
+            int bookCopyId = resultSet.getInt("bookcopy_id");
 
-            BookCopy bookCopy = new BookCopy(bookCopyId, Status.AVAILABLE, book);
+            BookCopy bookCopy = new BookCopy(Status.AVAILABLE, book);
+            bookCopy.setId(bookCopyId);
 
             Client client = new Client();
             client.setId(resultSet.getInt("client_id"));

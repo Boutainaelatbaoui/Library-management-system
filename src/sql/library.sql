@@ -11,7 +11,6 @@ CREATE TABLE books (
    description TEXT,
    publication_year VARCHAR(150),
    isbn VARCHAR(256),
-   quantity INT,
    author_id INT,
    FOREIGN KEY (author_id) REFERENCES authors(author_id) ON DELETE CASCADE
 );

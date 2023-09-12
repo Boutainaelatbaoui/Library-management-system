@@ -6,16 +6,14 @@ public class Book {
     private String description;
     private String publicationYear;
     private String isbn;
-    private int quantity;
     private Author author;
 
     // Constructor
-    public Book(String title, String description, String publicationYear, String isbn, int quantity, Author author) {
+    public Book(String title, String description, String publicationYear, String isbn, Author author) {
         this.title = title;
         this.description = description;
         this.publicationYear = publicationYear;
         this.isbn = isbn;
-        this.quantity = quantity;
         this.author = author;
     }
 
@@ -59,14 +57,6 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
     public Author getAuthor(){
         return author;
     }
@@ -84,7 +74,6 @@ public class Book {
                 ", description='" + description + '\'' +
                 ", publicationYear='" + publicationYear + '\'' +
                 ", isbn='" + isbn + '\'' +
-                ", quantity=" + quantity +
                 ", author=" + author +
                 '}';
     }

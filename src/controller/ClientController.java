@@ -77,7 +77,6 @@ public class ClientController {
                                                 Reservation reservation = reservationService.createReservation(client, copyRepository.getBookCopies(foundBook.getTitle()));
 
                                                 bookService.updateBookCopyStatus(reservation.getBookCopy(), Status.BORROWED);
-                                                bookService.decreaseBookQuantity(foundBook);
 
                                                 displayReservationInformation(reservation);
                                             }

@@ -39,7 +39,6 @@ public class CopyRepository {
                     String description = resultSet.getString("description");
                     String publicationYear = resultSet.getString("publication_year");
                     String isbn = resultSet.getString("isbn");
-                    int quantity = resultSet.getInt("quantity");
 
                     int authorId = resultSet.getInt("author_id");
                     String authorName = resultSet.getString("name");
@@ -48,9 +47,10 @@ public class CopyRepository {
 
                     Author author = new Author(authorName, authorBiography, authorBirthdate);
 
-                    Book book = new Book(title, description, publicationYear, isbn, quantity, author);
+                    Book book = new Book(title, description, publicationYear, isbn, author);
 
-                    BookCopy bookCopy = new BookCopy(bookCopyId, Status.AVAILABLE, book);
+                    BookCopy bookCopy = new BookCopy(Status.AVAILABLE, book);
+                    bookCopy.setId(bookCopyId);
                     return bookCopy;
                 }
             }
